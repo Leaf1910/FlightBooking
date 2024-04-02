@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Flights System</title>
+    <style>
+        /* Resetting Default Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Setting Background Color */
+        body {
+            background-color: #f6f6f6; /* Light gray background color */
+            font-family: 'Arial', sans-serif;
+            color: #333; /* Dark gray color for text */
+            padding: 20px;
+        }
+
+        /* Styling Header */
+        .header {
+            text-align: center;
+            padding: 20px;
+            color: #333; /* Dark gray color for header */
+            background-color: #333; /* White background color */
+            border-radius: 7px;
+            margin-bottom: 30px;
+        }
+
+        /* Styling Container */
+        .container {
+            background-color: #fff; /* White background color */
+            border: 3px solid #ddd; /* Light gray border */
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            color: #333; /* Dark gray color for text */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Styling Form Rows */
+        .flightrow {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Styling Form Labels */
+        .flightrow label {
+            flex: 1;
+            font-weight: bold;
+            color: #333; /* Dark gray color for labels */
+            font-family: Arial, sans-serif; /* Set font family */
+            font-size: 18px; /* Set font size */
+            margin-right: 20px;
+        }
+
+        /* Styling Form Inputs */
+        input[type="date"],
+        select {
+            flex: 2;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc; /* Light gray border */
+            font-family: Arial, sans-serif; /* Set font family */
+            font-size: 18px; /* Set font size */
+            color: #333; /* Dark gray color for text */
+        }
+
+        /* Styling Submit Button */
+        input[type="submit"] {
+            background-color: #444; /* Dark gray background color for button */
+            color: #fff; /* White text color */
+            padding: 12px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: Arial, sans-serif; /* Set font family */
+            font-size: 18px; /* Set font size */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #333; /* Darker gray background color on hover */
+        }
+
+        /* Styling Texts */
+        h1, h2, h3 {
+            color: #333; /* Dark gray color for headings */
+            font-family: Arial, sans-serif; /* Set font family */
+            margin-bottom: 20px;
+            background-color: #f9f9f9; /* Light gray background color for h1 */
+            padding: 10px; /* Add padding to h1 */
+            border-radius: 5px; /* Add border radius to h1 */
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333; /* Dark gray color for text */
+            font-family: Arial, sans-serif; /* Set font family */
+            margin-bottom: 20px;
+        }
+
+        /* Media Query for Responsive Layout */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .flightrow {
+                flex-direction: column;
+            }
+
+            .flightrow label {
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+
+            input[type="date"],
+            select {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Book Flights</h1>
+        </div>
+
+        <form th:action="@{/Bookdirect}" method="post">
+            <div class="flightrow">
+                <label for="FromAirport">Departure Airport:</label>
+                <select class="form-control" id="FromAirport" name="FromAirport">
+                    <option value="">Select an Airport</option>
+                    <option th:each="airport : ${airports}" th:value="${airport.getAirportAbbreviation()}" th:text="${airport.getAirportName()}"></option>
+                </select>
+            </div>
+
+            <div class="flightrow">
+                <label for="DepartureAirport">Arrival Airport:</label>
+                <select class="form-control" id="DepartureAirport" name="DepartureAirport">
+                    <option value="">Select an Airport</option>
+                    <option th:each="airport : ${airports}" th:value="${airport.getAirportAbbreviation()}" th:text="${airport.getAirportName()}"></option>
+                </select>
+            </div>
+
+            <div class="flightrow">
+                <label for="DepartureDate">Departure Date:</label>
+                <input type="date" class="form-control" id="DepartureDate" name="DepartureDate">
+            </div>
+
+            <div class="flightrow">
+                <label for="ArriveDate">Arrival Date:</label>
+                <input type="date" class="form-control" id="ArriveDate" name="ArriveDate">
+            </div>
+
+            <div class="flightrow">
+                <label for="timeFormat">Time Format:</label>
+                <select class="form-control" id="timeFormat" name="timeFormat">
+                    <option value="24">24-hour</option>
+                    <option value="12">12-hour</option>
+                </select>
+            </div>
+
+            <div class="flightrow">
+                <input type="submit" value="Display Flights">
+            </div>
+        </form>
+
+        <div th:if="${availableFlights}">
+            <h3>Available Flights</h3>
+            <ul>
+                <li th:each="flight : ${availableFlights}" th:text="${flight.toString()}"></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
